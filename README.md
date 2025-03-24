@@ -17,5 +17,8 @@ A Database API for Multiple Languages
 
 ## Installation
 
-To install `db_api` for Python, you can just clone the repo
-`git clone https://boburiiy/db_api`
+![Static Badge](https://img.shields.io/badge/just-clone-a?style=for-the-badge&logo=git&color=gray)
+
+```bash
+git clone https://boburiiy/db_api
+```
