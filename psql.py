@@ -42,9 +42,9 @@ class DB:
             and joing method translates this list into sql command like this:
             userId INT,
             username VARCHAR(255)
-        
+
         """
-        sql_ = f'CREATE TABLE IF NOT EXISTS {table_name} (\n{cols}\n);'
+        sql_ = f"CREATE TABLE IF NOT EXISTS {table_name} (\n{cols}\n);"
         "passing table name and translated columns with f string"
         """now its looks like
             CREATE TABLE IF NOT EXISTS users (
@@ -85,14 +85,15 @@ class DB:
             data for order, data in enumerate(values)
             if isinstance(data, list)
             or
-            print(colorize(f'{data} in order {order} is not a list', 'red'))
+            print(colorize(f"{data} in order {order} is not a list", "red"))
             # checking each element of values nor they are list nor will be passed away
         )
 
         variables = ','.join(variables)
         "translating ['userId','username'] into 'userId,username' now its not a list anymore"
         # passing table name, variables and adding parameter arguments * to length of columns count
-        sql_ = f'INSERT INTO {table_name} ({variables}) VALUES ({', '.join([' % s']*var_count)})'
+        paramters = ','.join(['%s']*var_count)
+        sql_ = f"INSERT INTO {table_name} ({variables}) VALUES ({paramters})"
         for param in values_list:
             self.exec(sql_, tuple(param), commit=True)
             # adding each item of values list one by one and ending the insert example
@@ -104,7 +105,7 @@ class DB:
             # i think it`s understandable by the condition
             raise ValueError('table name or keys or fetch is not given')
 
-        reqs = f'WHERE {kwargs['requires']}' if kwargs.get(
+        reqs = f"WHERE {kwargs['requires']}" if kwargs.get(
             'requires') else ''  # giving condition if it`s required by the user as requires argument
 
         sql_ = f"SELECT {','.join(args)} from {kwargs['table']} {reqs}"
@@ -125,7 +126,7 @@ class DB:
             raise ValueError(
                 'this function requires table name, condition, column names and parameters check for it')  # do you understand?
 
-        self.cur.execute(f'DELETE FROM {table_name} WHERE {condition}', params)
+        self.cur.execute(f"DELETE FROM {table_name} WHERE {condition}", params)
         "it will delete a row with the suitable condition from table with same as tale_name argument"
         # note condition should contain parameter argument %s to avoid sql injection
         if commit:
@@ -133,5 +134,5 @@ class DB:
 
     @try_it
     def _drop_table(self, table_name: str):
-        self.cur.execute(f'DROP TABLE {table_name}')  # just drop a table
+        self.cur.execute(f"DROP TABLE {table_name}")  # just drop a table
         self.conn.commit()
