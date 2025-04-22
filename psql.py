@@ -15,18 +15,18 @@ class DB:
 
     @try_it
     def exec(self, command: str, params: tuple = None, commit=False):
-        '!!! I prefer to execute delete or drop commands seperately'
+        """!!! I prefer to execute delete or drop commands seperately"""
         if 'DROP' in command.upper() or 'DELETE' in command.upper():
             raise ValueError('You added denied command')
 
-        'passes parameter if it is given'
+        """passes parameter if it is given"""
         self.cur.execute(command, params or None)
         if commit:
             self.conn.commit()
             print(colorize("committed", "GREEN"))
 
     def create_table(self, table_name: str, **kwargs):
-        'table_name give me name for new table'
+        """table_name give me name for new table"""
         if not kwargs or not table_name:
             raise ValueError('No table_name or kwargs given!!!')
         # creating table example start
@@ -45,8 +45,9 @@ class DB:
 
         """
         sql_ = f"CREATE TABLE IF NOT EXISTS {table_name} (\n{cols}\n);"
-        "passing table name and translated columns with f string"
-        """now its looks like
+        """
+        passing table name and translated columns with f string
+        now its looks like
             CREATE TABLE IF NOT EXISTS users (
                 userId INT,
                 username VARCHAR(255)
@@ -54,13 +55,13 @@ class DB:
         """
         # example end
         self.exec(sql_, commit=True)
-        "executing the final command and committing"
+        """executing the final command and committing"""
         return "done"
 
     def insert(self, table_name: str, **kwargs):
-        'table name is where to insert'
         # insert example start
-        " insert(table_name='users',columns=['userId',username'],values=[[12,'john doe'],[13,'bon doe']])"
+        """table name is where to insert
+        insert(table_name='users',columns=['userId',username'],values=[[12,'john doe'],[13,'bon doe']])"""
         variables = kwargs.get("columns")
         """
             gets list of column names
@@ -73,7 +74,7 @@ class DB:
             example the first item of values is [12,'john doe'] where 12 is inserts to userId and john doe to username
         """
         var_count = len(variables)
-        " its for passing %s parameter argument"
+        """its for passing %s parameter argument"""
         values_list = []
 
         if not isinstance(variables, list) or not variables:
@@ -100,7 +101,7 @@ class DB:
 
     def select(self, *args, **kwargs):
         # selecting example
-        "args are column names eg:['userId','username']"
+        """args are column names eg:['userId','username']"""
         if not kwargs.get('table') or not args or not kwargs.get('fetch'):
             # i think it`s understandable by the condition
             raise ValueError('table name or keys or fetch is not given')
@@ -127,7 +128,7 @@ class DB:
                 'this function requires table name, condition, column names and parameters check for it')  # do you understand?
 
         self.cur.execute(f"DELETE FROM {table_name} WHERE {condition}", params)
-        "it will delete a row with the suitable condition from table with same as tale_name argument"
+        """it will delete a row with the suitable condition from table with same as tale_name argument"""
         # note condition should contain parameter argument %s to avoid sql injection
         if commit:
             self.conn.commit()
